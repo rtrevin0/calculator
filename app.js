@@ -1,3 +1,7 @@
+var num1;
+var operator;
+var num2;
+
 function add(x, y) {
     return x + y;
 }
