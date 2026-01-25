@@ -21,5 +21,20 @@ function divide(x, y) {
     return x / y;
 }
 
+function operate(operator, x, y) {
+    switch (operator) {
+        case '+':
+            return add(x, y);
+        case '-':
+            return subtract(x, y);
+        case '*':
+            return multiply(x, y);
+        case '/':
+            return divide(x, y);
+        default:
+            throw new Error("Invalid operator");
+    }
+}
+
 // Export functions for use in other modules
 export { add, subtract, multiply, divide };
