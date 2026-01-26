@@ -1,6 +1,7 @@
 var num1;
 var operator;
 var num2;
+var operatorPressed = false;
 
 function add(x, y) {
     return x + y;
@@ -36,17 +37,50 @@ function operate(operator, x, y) {
     }
 }
 
-function updateNum1(value) {
-    num1 = parseFloat(value);
+function clearCalculator() {
+    console.log("Clear button pressed");
+    num1 = undefined;
+    operator = undefined;
+    num2 = undefined;
+    operatorPressed = false;
+    const result = document.getElementById('result');
+    result.value = '';
 }
 
-function updateOperator(value) {
-    operator = value;
+function handleButtonClick(value) {
+    const result = document.getElementById('result');
+
+    if (!isNaN(value) || value === '.') {
+        if (operatorPressed) {
+            result.value = '';
+            operatorPressed = false;
+        }
+        result.value += value;
+    } else if (value === '+' || value === '-' || value === '*' || value === '/') {
+        if (num1 === undefined) {
+            num1 = parseFloat(result.value);
+        } else if (operator) {
+            num2 = parseFloat(result.value);
+            num1 = operate(operator, num1, num2);
+            result.value = num1;
+        } 
+        operator = value;
+        operatorPressed = true;
+    } else if (value === '=') {
+        if (operator && num1 !== undefined) {
+            num2 = parseFloat(result.value);
+            const computation = operate(operator, num1, num2);
+            result.value = computation;
+            num1 = computation;
+            operator = undefined;
+        }
+    } else if (value === 'AC') {
+        clearCalculator();
+    }
 }
 
-function updateNum2(value) {
-    num2 = parseFloat(value);
-}
-
-// Export functions for use in other modules
-export { add, subtract, multiply, divide };
+document.querySelectorAll('.button').forEach(button => {
+    button.addEventListener('click', () => {
+        handleButtonClick(button.textContent);
+    });
+});
