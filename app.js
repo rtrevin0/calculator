@@ -36,5 +36,17 @@ function operate(operator, x, y) {
     }
 }
 
+function updateNum1(value) {
+    num1 = parseFloat(value);
+}
+
+function updateOperator(value) {
+    operator = value;
+}
+
+function updateNum2(value) {
+    num2 = parseFloat(value);
+}
+
 // Export functions for use in other modules
 export { add, subtract, multiply, divide };
