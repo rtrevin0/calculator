@@ -81,6 +81,6 @@ function handleButtonClick(value) {
 
 document.querySelectorAll('.button').forEach(button => {
     button.addEventListener('click', () => {
-        handleButtonClick(button.textContent);
+        handleButtonClick(button.dataset.id);
     });
 });
