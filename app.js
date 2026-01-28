@@ -60,8 +60,8 @@ function handleButtonClick(value) {
         if (num1 === undefined) {
             num1 = parseFloat(result.value);
         } else if (operator) {
-            num2 = parseFloat(result.value);
-            num1 = operate(operator, num1, num2);
+            // num2 = parseFloat(result.value);
+            // num1 = operate(operator, num1, num2);
             result.value = num1;
         } 
         operator = value;
