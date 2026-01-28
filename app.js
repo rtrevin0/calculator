@@ -73,13 +73,21 @@ function handleButtonClick(value) {
         if (operator && num1 !== undefined) {
             num2 = parseFloat(result.value);
             const computation = operate(operator, num1, num2);
-            result.value = computation;
+            const roundedComputation = computation.toFixed(4);
+            result.value = roundedComputation;
             num1 = computation;
             operator = undefined;
         }
     } else if (value === 'AC') {
         clearCalculator();
     }
+    if (result.value.length > 7 && result.value.length <= 10) {
+                result.style.fontSize = '1.5em';
+            } else if (result.value.length > 10 && result.value.length <= 14) {
+                result.style.fontSize = '1em'; 
+            } else if (result.value.length > 14) {
+                result.style.fontSize = '0.75em';
+            } 
 }
 
 document.querySelectorAll('.button').forEach(button => {
