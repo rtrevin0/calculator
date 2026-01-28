@@ -44,7 +44,7 @@ function clearCalculator() {
     num2 = undefined;
     operatorPressed = false;
     const result = document.getElementById('result');
-    result.value = '';
+    result.value = '0';
 }
 
 function handleButtonClick(value) {
@@ -54,6 +54,9 @@ function handleButtonClick(value) {
         if (operatorPressed) {
             result.value = '';
             operatorPressed = false;
+        }
+        if (result.value === '0' && value !== '.') {
+            result.value = '';
         }
         result.value += value;
     } else if (value === '+' || value === '-' || value === '*' || value === '/') {
@@ -84,3 +87,4 @@ document.querySelectorAll('.button').forEach(button => {
         handleButtonClick(button.dataset.id);
     });
 });
+window.onload = clearCalculator;
