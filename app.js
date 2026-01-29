@@ -45,7 +45,7 @@ function clearCalculator() {
     operatorPressed = false;
     const result = document.getElementById('result');
     result.value = '0';
-}
+}   
 
 function handleButtonClick(value) {
     const result = document.getElementById('result');
@@ -54,11 +54,16 @@ function handleButtonClick(value) {
         if (operatorPressed) {
             result.value = '';
             operatorPressed = false;
+            result.value += value;
+            if (num1 !== undefined) {
+                num2 = parseFloat(result.value);
+            }
+        } else {
+            if (result.value === '0' && value !== '.') {
+                result.value = '';
+            }
+            result.value += value;
         }
-        if (result.value === '0' && value !== '.') {
-            result.value = '';
-        }
-        result.value += value;
     } else if (value === '+' || value === '-' || value === '*' || value === '/') {
         if (num1 === undefined) {
             num1 = parseFloat(result.value);
@@ -71,12 +76,16 @@ function handleButtonClick(value) {
         operatorPressed = true;
     } else if (value === '=') {
         if (operator && num1 !== undefined) {
-            num2 = parseFloat(result.value);
+            if (num2 === undefined) {
+                return;
+            }
             const computation = operate(operator, num1, num2);
-            const roundedComputation = computation.toFixed(4);
+            const roundedComputation = computation.toFixed(2);
+            console.log("Computation result: " + roundedComputation);
             result.value = roundedComputation;
             num1 = computation;
             operator = undefined;
+            operatorPressed = false;
         }
     } else if (value === 'AC') {
         clearCalculator();
