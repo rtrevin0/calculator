@@ -74,21 +74,13 @@ function handleButtonClick(value) {
     } else if (value === '+' || value === '-' || value === '*' || value === '/') {
         if (num1 === undefined) {
             num1 = parseFloat(result.value);
-        } else if (operator) {
-            num2 = parseFloat(result.value);
-            try {
-                num1 = operate(operator, num1, num2);
-                result.value = num1;
-            } catch (error) {
-                alert(error.message);
-                clearCalculator();
-                return;
-            }  
         } 
         operator = value;
         operatorPressed = true;
+        console.log("Operator set to: " + operator);
     } else if (value === '=') {
         if (operator && num1 !== undefined) {
+            num2 = parseFloat(result.value);
             if (num2 === undefined) {
                 return;
             }
