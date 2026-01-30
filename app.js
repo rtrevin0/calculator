@@ -76,8 +76,14 @@ function handleButtonClick(value) {
             num1 = parseFloat(result.value);
         } else if (operator) {
             num2 = parseFloat(result.value);
-            num1 = operate(operator, num1, num2);
-            result.value = num1;
+            try {
+                num1 = operate(operator, num1, num2);
+                result.value = num1;
+            } catch (error) {
+                alert(error.message);
+                clearCalculator();
+                return;
+            }  
         } 
         operator = value;
         operatorPressed = true;
@@ -86,20 +92,26 @@ function handleButtonClick(value) {
             if (num2 === undefined) {
                 return;
             }
-            const computation = operate(operator, num1, num2);
-            let roundedComputation
-            let decimalPart = getDecimalPart(computation);
-            if (decimalPart === 0) {
-                roundedComputation = computation.toFixed(0);
-            } else {
-                console.log("Decimal part: " + decimalPart);
-                roundedComputation = computation.toFixed(8);
+            try {
+                const computation = operate(operator, num1, num2);
+                let roundedComputation
+                let decimalPart = getDecimalPart(computation);
+                if (decimalPart === 0) {
+                    roundedComputation = computation.toFixed(0);
+                } else {
+                    console.log("Decimal part: " + decimalPart);
+                    roundedComputation = computation.toFixed(8);
+                }
+                console.log("Computation result: " + roundedComputation);
+                result.value = roundedComputation;
+                num1 = computation;
+                operator = undefined;
+                operatorPressed = false;
+            } catch (error) {
+                alert(error.message);
+                clearCalculator();
+                return;
             }
-            console.log("Computation result: " + roundedComputation);
-            result.value = roundedComputation;
-            num1 = computation;
-            operator = undefined;
-            operatorPressed = false;
         }
     } else if (value === 'AC') {
         clearCalculator();
