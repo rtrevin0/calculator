@@ -47,6 +47,13 @@ function clearCalculator() {
     result.value = '0';
 }   
 
+function getDecimalPart(number) {
+    const absoluteNumber = Math.abs(number);
+    const integerPart = Math.trunc(absoluteNumber);
+    const decimalPart = absoluteNumber - integerPart;
+    return decimalPart;
+}
+
 function handleButtonClick(value) {
     const result = document.getElementById('result');
 
@@ -80,7 +87,14 @@ function handleButtonClick(value) {
                 return;
             }
             const computation = operate(operator, num1, num2);
-            const roundedComputation = computation.toFixed(2);
+            let roundedComputation
+            let decimalPart = getDecimalPart(computation);
+            if (decimalPart === 0) {
+                roundedComputation = computation.toFixed(0);
+            } else {
+                console.log("Decimal part: " + decimalPart);
+                roundedComputation = computation.toFixed(8);
+            }
             console.log("Computation result: " + roundedComputation);
             result.value = roundedComputation;
             num1 = computation;
