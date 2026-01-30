@@ -2,6 +2,7 @@ var num1;
 var operator;
 var num2;
 var operatorPressed = false;
+var computationCompleted = false;
 
 function add(x, y) {
     return x + y;
@@ -45,6 +46,7 @@ function clearCalculator() {
     operatorPressed = false;
     const result = document.getElementById('result');
     result.value = '0';
+    computationCompleted = false;
 }   
 
 function getDecimalPart(number) {
@@ -56,6 +58,16 @@ function getDecimalPart(number) {
 
 function handleButtonClick(value) {
     const result = document.getElementById('result');
+
+    if (computationCompleted && !isNaN(value)) {
+        clearCalculator();
+        computationCompleted = false;
+    }
+
+    if (computationCompleted && num2 === undefined && (value === '+' || value === '-' || value === '*' || value === '/')) {
+        computationCompleted = false;
+    }
+
 
     if (!isNaN(value) || value === '.') {
         if (operatorPressed) {
@@ -99,6 +111,8 @@ function handleButtonClick(value) {
                 num1 = computation;
                 operator = undefined;
                 operatorPressed = false;
+                num2 = undefined;
+                computationCompleted = true;
             } catch (error) {
                 alert(error.message);
                 clearCalculator();
