@@ -105,12 +105,12 @@ function handleButtonClick(value) {
         clearCalculator();
     }
     if (result.value.length > 7 && result.value.length <= 10) {
-                result.style.fontSize = '1.5em';
-            } else if (result.value.length > 10 && result.value.length <= 14) {
-                result.style.fontSize = '1em'; 
-            } else if (result.value.length > 14) {
-                result.style.fontSize = '0.75em';
-            } 
+            result.style.fontSize = '1.5em';
+    } else if (result.value.length > 10 && result.value.length <= 14) {
+        result.style.fontSize = '1em'; 
+    } else if (result.value.length > 14) {
+        result.style.fontSize = '0.75em';
+    } 
 }
 
 document.querySelectorAll('.button').forEach(button => {
