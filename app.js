@@ -4,6 +4,10 @@ var num2;
 var operatorPressed = false;
 var computationCompleted = false;
 
+
+const decimalButton = document.getElementById('decimal');
+const result = document.getElementById('result');
+
 function add(x, y) {
     return x + y;
 }
@@ -47,6 +51,8 @@ function clearCalculator() {
     const result = document.getElementById('result');
     result.value = '0';
     computationCompleted = false;
+    decimalButton.disabled = false;
+    result.style.fontSize = '1.75em';
 }   
 
 function getDecimalPart(number) {
@@ -57,8 +63,6 @@ function getDecimalPart(number) {
 }
 
 function handleButtonClick(value) {
-    const result = document.getElementById('result');
-
     if (computationCompleted && !isNaN(value)) {
         clearCalculator();
         computationCompleted = false;
@@ -121,6 +125,11 @@ function handleButtonClick(value) {
         }
     } else if (value === 'AC') {
         clearCalculator();
+    }
+    if (result.value.includes('.') && !computationCompleted) {
+        decimalButton.disabled = true;
+    } else {
+        decimalButton.disabled = false;
     }
     if (result.value.length > 7 && result.value.length <= 10) {
             result.style.fontSize = '1.5em';
