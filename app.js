@@ -63,6 +63,17 @@ function getDecimalPart(number) {
 }
 
 function handleButtonClick(value) {
+    if (value === '<') {
+        console.log("Backspace button pressed");
+        if (result.value !== '0') {
+            result.value = result.value.slice(0, -1);
+            computationCompleted = false;
+            if (result.value === '' || result.value === '-') {
+                result.value = '0';
+            }
+        }
+        return;
+    }
     if (computationCompleted && (!isNaN(value) || value === '.')) {
         clearCalculator();
         computationCompleted = false;
@@ -89,7 +100,7 @@ function handleButtonClick(value) {
             result.value += value;
         }
     } else if (value === '+' || value === '-' || value === '*' || value === '/') {
-        if (num1 === undefined) {
+        if (num1 === undefined || !operatorPressed) {
             num1 = parseFloat(result.value);
         } 
         operator = value;
