@@ -63,15 +63,16 @@ function getDecimalPart(number) {
 }
 
 function handleButtonClick(value) {
-    if (computationCompleted && !isNaN(value)) {
+    if (computationCompleted && (!isNaN(value) || value === '.')) {
         clearCalculator();
         computationCompleted = false;
+        result.value = value;
+        return;
     }
 
     if (computationCompleted && num2 === undefined && (value === '+' || value === '-' || value === '*' || value === '/')) {
         computationCompleted = false;
     }
-
 
     if (!isNaN(value) || value === '.') {
         if (operatorPressed) {
@@ -126,7 +127,7 @@ function handleButtonClick(value) {
     } else if (value === 'AC') {
         clearCalculator();
     }
-    if (result.value.includes('.') && !computationCompleted) {
+    if (result.value.includes('.') && !computationCompleted && !operatorPressed) {
         decimalButton.disabled = true;
     } else {
         decimalButton.disabled = false;
