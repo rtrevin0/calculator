@@ -167,9 +167,29 @@ function handleButtonClick(value) {
     } 
 }
 
+function handleKeydown(event) {
+    console.log(event.key);
+    const validKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/', 'Enter', 'Backspace', 'Escape'];
+    if (validKeys.includes(event.key)) {
+        let value = event.key;
+        if (value === 'Enter') {
+            value = '=';
+        } else if (value === 'Backspace') {
+            value = '<';
+        } else if (value === 'Escape') {
+            value = 'AC';
+        }
+        handleButtonClick(value);
+    }
+}
+
 document.querySelectorAll('.button').forEach(button => {
     button.addEventListener('click', () => {
         handleButtonClick(button.dataset.id);
-    });
+    }); 
+});
+
+document.addEventListener('keydown', (event) => {
+    handleKeydown(event);
 });
 window.onload = clearCalculator;
