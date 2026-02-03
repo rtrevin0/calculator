@@ -63,17 +63,6 @@ function getDecimalPart(number) {
 }
 
 function handleButtonClick(value) {
-    if (value === '<') {
-        console.log("Backspace button pressed");
-        if (result.value !== '0') {
-            result.value = result.value.slice(0, -1);
-            computationCompleted = false;
-            if (result.value === '' || result.value === '-') {
-                result.value = '0';
-            }
-        }
-        return;
-    }
     if (computationCompleted && (!isNaN(value) || value === '.')) {
         clearCalculator();
         computationCompleted = false;
@@ -84,6 +73,32 @@ function handleButtonClick(value) {
     if (computationCompleted && num2 === undefined && (value === '+' || value === '-' || value === '*' || value === '/')) {
         computationCompleted = false;
     }
+
+    if (value === '<') {
+        if (computationCompleted) {
+            if (result.value.length > 1) {
+                result.value = result.value.slice(0, -1);
+                num1 = parseFloat(result.value);
+            } else {
+                clearCalculator();
+                result.value = '0';
+            }
+        } else if (!operatorPressed) {
+            if (result.value.length > 1) {
+                result.value = result.value.slice(0, -1);
+            } else {
+                result.value = '0';
+            }
+
+            if (num1 !== undefined && operator === undefined) {
+                num1 = parseFloat(result.value);
+            } else if (num2 !== undefined) {
+                num2 = parseFloat(result.value);
+            }
+        }
+        return;
+    }
+
 
     if (!isNaN(value) || value === '.') {
         if (operatorPressed) {
@@ -100,7 +115,7 @@ function handleButtonClick(value) {
             result.value += value;
         }
     } else if (value === '+' || value === '-' || value === '*' || value === '/') {
-        if (num1 === undefined || !operatorPressed) {
+        if (num1 === undefined) {
             num1 = parseFloat(result.value);
         } 
         operator = value;
