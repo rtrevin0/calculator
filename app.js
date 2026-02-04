@@ -78,7 +78,8 @@ function handleButtonClick(value) {
         if (computationCompleted) {
             if (result.value.length > 1) {
                 result.value = result.value.slice(0, -1);
-                num1 = parseFloat(result.value);
+                computationCompleted = false;
+                num1 = undefined;
             } else {
                 clearCalculator();
                 result.value = '0';
