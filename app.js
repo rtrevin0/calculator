@@ -1,100 +1,41 @@
-var num1;
-var operator;
-var num2;
-var operatorPressed = false;
-var computationCompleted = false;
-
-
 const decimalButton = document.getElementById('decimal');
-const result = document.getElementById('result');
+const result = document.getElementById('result');  
 
-function add(x, y) {
-    return x + y;
-}
-
-function subtract(x, y) {
-    return x - y;
-}
-
-function multiply(x, y) {
-    return x * y;
-}
-
-function divide(x, y) {
-    if (y === 0) {
-        throw new Error("Cannot divide by zero");
-    }
-    return x / y;
-}
-
-function operate(operator, x, y) {
-    switch (operator) {
-        case '+':
-            return add(x, y);
-        case '-':
-            return subtract(x, y);
-        case '*':
-            return multiply(x, y);
-        case '/':
-            return divide(x, y);
-        default:
-            throw new Error("Invalid operator");
-    }
-}
-
-function clearCalculator() {
-    console.log("Clear button pressed");
-    num1 = undefined;
-    operator = undefined;
-    num2 = undefined;
-    operatorPressed = false;
-    const result = document.getElementById('result');
-    result.value = '0';
-    computationCompleted = false;
-    decimalButton.disabled = false;
-    result.style.fontSize = '1.75em';
-}   
-
-function getDecimalPart(number) {
-    const absoluteNumber = Math.abs(number);
-    const integerPart = Math.trunc(absoluteNumber);
-    const decimalPart = absoluteNumber - integerPart;
-    return decimalPart;
-}
+const calculator = new Calculator();
 
 function handleButtonClick(value) {
-    if (computationCompleted && (!isNaN(value) || value === '.')) {
-        clearCalculator();
-        computationCompleted = false;
+    if (calculator.getComputationCompleted() && (!isNaN(value) || value === '.')) {
+        calculator.clear();
+        calculator.getComputationCompleted() = false;
         result.value = value;
         return;
     }
 
-    if (computationCompleted && num2 === undefined && (value === '+' || value === '-' || value === '*' || value === '/')) {
-        computationCompleted = false;
+    if (calculator.getComputationCompleted() && calculator.getNum2() === undefined && (calculator.isValidOperator(value))) {
+        calculator.setComputationCompleted = false;
     }
 
     if (value === '<') {
-        if (computationCompleted) {
+        if (calculator.getComputationCompleted()) {
             if (result.value.length > 1) {
                 result.value = result.value.slice(0, -1);
-                computationCompleted = false;
-                num1 = undefined;
+                calculator.setComputationCompleted = false;
+                calculator.setNum1(undefined);
             } else {
-                clearCalculator();
+                calculator.clear();
                 result.value = '0';
             }
-        } else if (!operatorPressed) {
+        } else if (!calculator.getOperatorPressed) {
             if (result.value.length > 1) {
                 result.value = result.value.slice(0, -1);
             } else {
                 result.value = '0';
             }
 
-            if (num1 !== undefined && operator === undefined) {
-                num1 = parseFloat(result.value);
-            } else if (num2 !== undefined) {
-                num2 = parseFloat(result.value);
+            if (calculator.getNum1 !== undefined && calculator.getOperator() === undefined) {
+                calculator.setNum1(parseFloat(result.value));
+            } else if (calculator.getNum2 !== undefined) {
+                calculator.setNum2(parseFloat(result.value));
             }
         }
         return;
@@ -102,12 +43,12 @@ function handleButtonClick(value) {
 
 
     if (!isNaN(value) || value === '.') {
-        if (operatorPressed) {
+        if (calculator.getOperatorPressed()) {
             result.value = '';
-            operatorPressed = false;
+            calculator.setOperatorPressed(false);
             result.value += value;
-            if (num1 !== undefined) {
-                num2 = parseFloat(result.value);
+            if (calculator.getNum1() !== undefined) {
+                calculator.setNum2(parseFloat(result.value));
             }
         } else {
             if (result.value === '0' && value !== '.') {
@@ -115,50 +56,50 @@ function handleButtonClick(value) {
             }
             result.value += value;
         }
-    } else if (value === '+' || value === '-' || value === '*' || value === '/') {
-        if (num1 === undefined) {
-            num1 = parseFloat(result.value);
+    } else if (calculator.isValidOperator(value)) {
+        if (calculator.getNum1() === undefined) {
+            calculator.setNum1(parseFloat(result.value));
         } 
-        operator = value;
-        operatorPressed = true;
-        console.log("Operator set to: " + operator);
+        calculator.setOperator(value);
+        calculator.setOperatorPressed(true);
     } else if (value === '=') {
-        if (operator && num1 !== undefined) {
-            num2 = parseFloat(result.value);
-            if (num2 === undefined) {
+        if (calculator.getOperator() && calculator.getNum1() !== undefined) {
+            calculator.setNum2(parseFloat(result.value));
+            if (calculator.getNum2() === undefined) {
                 return;
             }
             try {
-                const computation = operate(operator, num1, num2);
+                const computation = calculator.operate(operator, num1, num2);
                 let roundedComputation
-                let decimalPart = getDecimalPart(computation);
+                let decimalPart = calculator.getDecimalPart(computation);
                 if (decimalPart === 0) {
                     roundedComputation = computation.toFixed(0);
                 } else {
                     console.log("Decimal part: " + decimalPart);
                     roundedComputation = computation.toFixed(8);
                 }
-                console.log("Computation result: " + roundedComputation);
                 result.value = roundedComputation;
-                num1 = computation;
-                operator = undefined;
-                operatorPressed = false;
-                num2 = undefined;
-                computationCompleted = true;
+                calculator.setNum1(computation);
+                calculator.setOperator(undefined);
+                calculator.setOperatorPressed(false);
+                calculator.setNum2(undefined);
+                calculator.setComputationCompleted(true);
             } catch (error) {
                 alert(error.message);
-                clearCalculator();
+                calculator.clear();
                 return;
             }
         }
     } else if (value === 'AC') {
-        clearCalculator();
+        calculator.clear();
     }
-    if (result.value.includes('.') && !computationCompleted && !operatorPressed) {
+    
+    if (result.value.includes('.') && !calculator.getComputationCompleted() && !calculator.getOperatorPressed()) {
         decimalButton.disabled = true;
     } else {
         decimalButton.disabled = false;
     }
+
     if (result.value.length > 7 && result.value.length <= 10) {
             result.style.fontSize = '1.5em';
     } else if (result.value.length > 10 && result.value.length <= 14) {
@@ -169,7 +110,6 @@ function handleButtonClick(value) {
 }
 
 function handleKeydown(event) {
-    console.log(event.key);
     const validKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/', 'Enter', 'Backspace', 'Escape'];
     if (validKeys.includes(event.key)) {
         let value = event.key;
@@ -184,6 +124,15 @@ function handleKeydown(event) {
     }
 }
 
+function resetCalculator() {
+    calculator.clear();
+    if (typeof window !== 'undefined') {
+        result.value = '0';
+        decimalButton.disabled = false;
+        result.style.fontSize = '1.75em';
+    }
+}
+
 document.querySelectorAll('.button').forEach(button => {
     button.addEventListener('click', () => {
         handleButtonClick(button.dataset.id);
@@ -193,4 +142,4 @@ document.querySelectorAll('.button').forEach(button => {
 document.addEventListener('keydown', (event) => {
     handleKeydown(event);
 });
-window.onload = clearCalculator;
+window.onload = calculator.clear();
